@@ -1,7 +1,7 @@
 import cv2
 import sys
 
-video_path = './video/soccer.mp4'
+video_path = './video/game.mp4'
 
 # 기본 카메라 객체 생성
 cap = cv2.VideoCapture(video_path)
@@ -19,8 +19,8 @@ while True: # 무한 루프
     # 읽어온 프레임 실행
     cv2.imshow('frame', frame)
 
-    # 20초마다 한 프레임 세팅 + Esc누르면 while 종료
-    if cv2.waitKey(1) == 27:
+    # 20ms마다 한 프레임 세팅 + Esc누르면 while 종료
+    if cv2.waitKey(20) == 27:
         break
 
 cap.release() # cap 객체 free시킴
