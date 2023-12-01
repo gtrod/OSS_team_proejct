@@ -19,8 +19,8 @@ while True: # 무한 루프
     # 읽어온 프레임 실행
     cv2.imshow('frame', frame)
 
-    # 20ms마다 한 프레임 세팅 + Esc누르면 while 종료
-    if cv2.waitKey(20) == 27:
+    # 16ms마다 한 프레임 세팅 + Esc누르면 while 종료
+    if cv2.waitKey(16) == 27:
         break
 
 cap.release() # cap 객체 free시킴
