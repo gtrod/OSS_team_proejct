@@ -1,3 +1,5 @@
+#프로그램을 실행시키기 위해선 terminal에 pip install opencv-contrib-python 필요 
+
 import cv2
 import sys
 
