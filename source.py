@@ -1,71 +1,90 @@
-#프로그램을 실행시키기 위해선 terminal에 pip install opencv-contrib-python 필요 
+# Please download modules to execute program through these commands Before you use this program.
+""" 
+     pip install opencv-python==4.8.1.78
+     pip install opencv-contrib-python=4.5.3.56
+     pip install numpy==1.21.6
+"""
+
 
 import cv2
 import sys
 
-video_path = './video/game.mp4'
+debug = True # to check info in video, set True
 
-# 기본 카메라 객체 생성
+video_path = 'game.mp4' #set file directory you want to play
+
+# Create default camera object
 cap = cv2.VideoCapture(video_path)
-
 ret, frame = cap.read()
-#첫 frame을 읽지 못 했을 시 예외처리
+
+# Actively calculates delay of frame
+fps = cap.get(cv2.CAP_PROP_FPS)
+delay = int(1000/fps)
+
+
+# exception to failure of reading first frame
 if not ret:
     print("Failed to read the first frame!")
     sys.exit()
 tracker = cv2.legacy.TrackerCSRT_create()
 
-#객체 선택 (드래그 하여 객체 설정 + ESC누르면 영상 재생)
-# 예외 발생 시 오류 처리
-try:
+# selecting object that would be tracked
+# Setting object by drag mouse point
+# Play video by typing ESC after setting object
+try:    
     bbox = cv2.selectROI("Select Ball", frame, fromCenter=False, showCrosshair=True)
-except cv2.error as e:
+except cv2.error as e: # exception of error
     print("Error during ROI selection:", e)
     sys.exit()
 
-object_position = []
-
-# 영상이 제대로 열리지 않았을 때 예외 처리
+# exception when opening video is failed
 if not cap.isOpened():
-    print("Camera open failed!")
+    print("video open failed!")
     sys.exit()
 
-# 비디오 크기 설정
+# setting video size
 desired_width = 640
 desired_height = 480
 
-# 초기 추적 설정
+# initialize tracker
 tracker.init(frame, bbox)
 
-while True:  # 무한 루프
-    # ret - 프레임 읽으면 True, 못 읽으면 False 반환
-    # frame - 읽은 프레임 이미지 저장
+while True:  # tracking video loop
+    
+    # ret | True: successed reading and tracking, False: failed reading
+    # frame | valuse that stores new frame successed to tracking
     ret, frame = cap.read()
-    # frame을 읽지 못 했을 시 예외처리
+    # exception to failure of reading frame
     if not ret:
         print("Failed to read the frame!")
         break
 
-    # 추적 업데이트
+    # Updating tracked object
     success, bbox = tracker.update(frame)
 
-    if success:
-        object_center = (int(bbox[0] + bbox[2] / 2), int(bbox[1] + bbox[3] / 2))
-        print("Object position:", object_center)
-
     if ret:
-        # int로 변환
+        # Convert bbox to int type
         bbox = tuple(map(int, bbox))
         
-        # 추적 물체 사각형으로 위치 표현
-        cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[0] + bbox[2], bbox[1] + bbox[3]), (0, 255, 0), 2)
-
-    # 읽어온 프레임 실행
+        #Info of object position
+        (x,y,w,h) = bbox # x, y : point of coordinate | w, h : length of box
+        center_x = int(x + w / 2)
+        center_y = int(y + h / 2)
+        object_center = (center_x, center_y) #center point of Box
+        
+        # Debugging info in video | to see these infos in video, set debug True
+        # Showing box of tracked object in video
+        if debug:
+            cv2.rectangle(frame, (int(x), int(y)), (int(x + w), int(y + h)), (0, 255, 0), 2)
+            cv2.putText(frame, str(object_center), (0,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0, 255, 0), 2, cv2.LINE_AA) #debugging coordinate of position
+            cv2.circle(frame, (center_x, center_y), 5, (0,255,0), -1) #debugging center point
+    
+    # Update frame that are retracked object
     cv2.imshow('frame', frame)
 
-    # 20ms 마다 한 프레임 세팅 + Esc누르면 while 종료
-    if cv2.waitKey(40) == 27:
+    # Delay of frames and escaping case when typing ESC
+    if cv2.waitKey(delay) == 27:
         break
 
-cap.release()  # cap 객체 free시킴
-cv2.destroyAllWindows()  # 창 닫기
+cap.release()  # Free the tracking object
+cv2.destroyAllWindows()  #closing video
