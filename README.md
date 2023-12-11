@@ -7,7 +7,7 @@ We are looking for modifying this program, for example, Camera chasing, drawing 
 
 # Video Examples of project#
 You can see Examples of this project in 'Examples' Directory
-
+(The Example video is too big to upload in Readme.md through .gif file.
 ---
 
 # Info of Packages
