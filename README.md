@@ -1,22 +1,23 @@
 # Overview of Project
 It is a basic program in which a user sets an object in a video to track an object.
 You can modify this program whatever you want.
-We are looking for modifying this program, for example, Camera chasing, drawing heatmap of object, etc.
+We look forward to modify this program, for example, Camera chasing, drawing heatmap of object, etc.
 
 ---
 
-# Video Examples of project#
+# Video Examples of project
 You can see Examples of this project in 'Examples' Directory
-(The Example video is too big to upload in Readme.md through .gif file.
----
 
+(The Example video is too big to upload in Readme.md through .gif file.)
+
+---
 # Info of Packages
 ### Built-in Module
 ```python
 import sys
 ```
 ### Third-party Module
-Please install these third-party module in bash or terminal of your system.
+Please install these third-party modules in bash or terminal of your system.
 ```bash
 pip install opencv-python==4.8.1.78
 pip install opencv-contrib-python==4.5.3.56
